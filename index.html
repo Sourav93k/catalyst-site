@@ -7,6 +7,44 @@
     <script src="https://cdn.tailwindcss.com"></script>
   </head>
   <body class="bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-200">
-    <h1 class="text-3xl font-bold text-center mt-10">It works! 🚀</h1>
-  </body>
+  <!-- NAVBAR -->
+  <nav class="container mx-auto px-4 py-6 flex items-center justify-between">
+    <a href="/" class="text-2xl font-bold">Catalyst+ by Sourav</a>
+    <ul class="hidden md:flex space-x-6">
+      <li><a href="#" class="hover:text-amber-500">Home</a></li>
+      <li><a href="#" class="hover:text-amber-500">Gov Jobs</a></li>
+      <li><a href="#" class="hover:text-amber-500">Static GK</a></li>
+      <li><a href="#" class="hover:text-amber-500">AI Chatbot</a></li>
+    </ul>
+    <button id="dark-toggle" class="md:hidden p-2 rounded-md">🌓</button>
+    <a href="https://t.me/yourchannel" target="_blank"
+       class="hidden md:inline-block bg-amber-500 text-white px-4 py-2 rounded-full">
+      Join Telegram
+    </a>
+    <button id="mobile-menu-btn" class="md:hidden p-2">☰</button>
+  </nav>
+  <!-- HERO -->
+  <section class="container mx-auto px-4 py-20 flex flex-col-reverse md:flex-row items-center gap-10">
+    <div class="flex-1">
+      <span class="inline-block bg-amber-100 text-amber-800 px-3 py-1 rounded-full mb-4">Your Success Partner</span>
+      <h1 class="text-4xl md:text-6xl font-extrabold mb-4">
+        Empower Your <span class="text-amber-500">GK.</span> Ace Every Exam.
+      </h1>
+      <p class="text-lg mb-6 text-slate-600 dark:text-slate-400">
+        Master government job preparation with comprehensive GK resources, latest job updates, and AI-powered guidance.
+      </p>
+      <div class="flex space-x-4">
+        <a href="#" class="bg-amber-500 text-white px-6 py-3 rounded-full font-medium shadow hover:shadow-lg transition">
+          Explore Now
+        </a>
+        <a href="#" class="border border-amber-500 text-amber-500 px-6 py-3 rounded-full font-medium hover:bg-amber-50 transition">
+          Browse Resources
+        </a>
+      </div>
+    </div>
+    <div class="flex-1">
+      <!-- placeholder image -->
+      <img src="https://via.placeholder.com/600x400" alt="Study group" class="rounded-2xl shadow-lg">
+    </div>
+  </section>
 </html>
