@@ -25,10 +25,10 @@ export default async function handler(req) {
                 body: JSON.stringify({
                     contents: [{ role: 'user', parts: [{ text: message }] }],
                     safetySettings: [
-                        // --- CHANGE STARTS HERE ---
-                        // Corrected category name from 'HARM_CATEGORY_DANGEROUS' to 'DANGEROUS_CONTENT'
-                        { category: 'DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-                        // --- CHANGE ENDS HERE ---
+                        // --- CRITICAL FIX HERE ---
+                        // Changed category to the full enum name as required by the API
+                        { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+                        // --- END CRITICAL FIX ---
                     ],
                     generationConfig: { temperature: 0.7 }
                 })
