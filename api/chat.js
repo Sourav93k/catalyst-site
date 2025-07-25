@@ -17,7 +17,8 @@ export default async function handler(req) {
 
         // 1) Call Gemini API
         const geminiRes = await fetch(
-            'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=' +
+            // --- CRITICAL FIX HERE: Changed model to gemini-pro ---
+            'https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=' +
             process.env.GEMINI_KEY,
             {
                 method: 'POST',
@@ -25,10 +26,7 @@ export default async function handler(req) {
                 body: JSON.stringify({
                     contents: [{ role: 'user', parts: [{ text: message }] }],
                     safetySettings: [
-                        // --- CRITICAL FIX HERE ---
-                        // Changed category to the full enum name as required by the API
                         { category: 'HARM_CATEGORY_DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
-                        // --- END CRITICAL FIX ---
                     ],
                     generationConfig: { temperature: 0.7 }
                 })
