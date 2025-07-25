@@ -10,8 +10,19 @@ export default async function handler(req) {
             );
         }
 
-        // Parse the incoming message from the request body
-        const { message } = await req.json();
+        // --- CHANGE STARTS HERE ---
+        // Instead of req.json(), read the body as text first, then parse it.
+        let message;
+        try {
+            const rawBody = await req.text(); // Read the request body as text
+            const parsedBody = JSON.parse(rawBody); // Parse the text as JSON
+            message = parsedBody.message;
+        } catch (parseError) {
+            console.error('Error parsing request body:', parseError);
+            throw new Error('Invalid request body. Expected JSON.');
+        }
+        // --- CHANGE ENDS HERE ---
+
         if (!message) {
             throw new Error('No message provided in the request body.');
         }
@@ -19,7 +30,6 @@ export default async function handler(req) {
         // 1) Call Gemini API
         // IMPORTANT: Ensure 'gemini-1.5-flash-latest' or 'gemini-1.5-pro-latest'
         // is the correct and desired model name for your use case.
-        // 'gemini-2.5-flash-lite' was an invalid model name.
         const geminiRes = await fetch(
             'https://generativelanguage.googleapis.com/v1/models/gemini-1.5-flash-latest:generateContent?key=' +
             process.env.GEMINI_KEY, // Ensure GEMINI_KEY is set in your environment variables
@@ -28,12 +38,10 @@ export default async function handler(req) {
                 headers: { 'Content-Type': 'application/json' },
                 body: JSON.stringify({
                     contents: [{ role: 'user', parts: [{ text: message }] }],
-                    // Safety settings: BLOCK_NONE for DANGEROUS category is a deliberate choice.
-                    // Re-evaluate if you want to block harmful content more strictly for a public-facing app.
                     safetySettings: [
                         { category: 'HARM_CATEGORY_DANGEROUS', threshold: 'BLOCK_NONE' }
                     ],
-                    generationConfig: { temperature: 0.7 } // Adjust temperature for creativity (0.0 - 1.0)
+                    generationConfig: { temperature: 0.7 }
                 })
             }
         );
@@ -41,7 +49,7 @@ export default async function handler(req) {
         // 2) If Gemini itself returns a non-200 status, read its text and throw an error
         if (!geminiRes.ok) {
             const errText = await geminiRes.text();
-            console.error('Gemini API error response:', errText); // Log full error response for debugging
+            console.error('Gemini API error response:', errText);
             throw new Error(
                 `Gemini API error ${geminiRes.status}: ${errText.slice(0, 200)}...`
             );
@@ -51,7 +59,6 @@ export default async function handler(req) {
         const geminiJson = await geminiRes.json();
 
         // Extract the reply from the Gemini response.
-        // It safely navigates through nested objects and provides a fallback message.
         const reply =
             geminiJson.candidates?.[0]?.content?.parts?.[0]?.text ||
             'Sorry, I could not generate a response at this time. Please try again.';
