@@ -1,3 +1,32 @@
+// grab the container where all messages live
+const chatContainer = document.getElementById('chat');
+
+// 1) show a user bubble
+function addUserMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'bubble user';
+  msg.textContent = text;
+  chatContainer.append(msg);
+  msg.scrollIntoView({ behavior: 'smooth' });
+}
+
+// 2) show a bot bubble
+function addBotMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'bubble bot';
+  msg.textContent = text;
+  chatContainer.append(msg);
+  msg.scrollIntoView({ behavior: 'smooth' });
+}
+
+// 3) show an error bubble
+function addErrorMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'bubble error';
+  msg.textContent = text;
+  chatContainer.append(msg);
+  msg.scrollIntoView({ behavior: 'smooth' });
+}
 document.addEventListener('DOMContentLoaded', () => {
   // Dark-mode toggle
   const darkToggle = document.getElementById('dark-toggle');
@@ -67,8 +96,39 @@ document.addEventListener('DOMContentLoaded', () => {
     // Display the AI’s reply
     addBotMessage(payload.reply);
   } catch (err) {
+    const chatContainer = document.getElementById('chat');
+
+function addUserMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'bg-blue-100 dark:bg-blue-800 text-black dark:text-white p-2 rounded self-end text-right';
+  msg.textContent = text;
+  chatContainer.append(msg);
+  msg.scrollIntoView({ behavior: 'smooth' });
+}
+function addBotMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'bg-gray-200 dark:bg-slate-600 text-black dark:text-white p-2 rounded self-start text-left';
+  msg.textContent = text;
+  chatContainer.append(msg);
+  msg.scrollIntoView({ behavior: 'smooth' });
+}
+
+function addErrorMessage(text) {
+  const msg = document.createElement('div');
+  msg.className = 'bg-red-100 dark:bg-red-800 text-red-800 dark:text-red-200 p-2 rounded text-left';
+  msg.textContent = text;
+  chatContainer.append(msg);
+  msg.scrollIntoView({ behavior: 'smooth' });
+}
     // Show an error message bubble
     addErrorMessage(`Error connecting to chatbot: ${err.message}`);
   }
+  document.getElementById('chat-form').addEventListener('submit', e => {
+  e.preventDefault();
+  const text = e.target.userInput.value.trim();
+  if (!text) return;
+  sendToChatbot(text);
+  e.target.userInput.value = '';
+});
   });
 });
