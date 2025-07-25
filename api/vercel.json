@@ -1,7 +1,0 @@
-{
-  "functions": {
-    "api/**/*.js": {
-      "maxDuration": 600 // Sets timeout to 600 seconds (10 minutes)
-    }
-  }
-}
