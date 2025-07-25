@@ -1,32 +1,31 @@
 document.addEventListener('DOMContentLoaded', () => {
-  // Toggle mobile menu
-  const mobileBtn = document.getElementById('mobile-menu-btn');
+  // 1. Find the buttons and menu container
+  const menuBtn = document.getElementById('mobile-menu-btn');
   const mobileMenu = document.getElementById('mobile-menu');
-  if (mobileBtn && mobileMenu) {
-    mobileBtn.addEventListener('click', () => {
+  const darkToggle = document.getElementById('dark-toggle');
+
+  // 2. Wire up the mobile menu button
+  if (menuBtn && mobileMenu) {
+    menuBtn.addEventListener('click', () => {
+      console.log('☰ mobile menu button clicked');
       mobileMenu.classList.toggle('hidden');
+      console.log('  → mobile-menu hidden class is now:', mobileMenu.classList.contains('hidden'));
     });
+  } else {
+    console.error('❌ Missing mobile menu elements:', menuBtn, mobileMenu);
   }
 
-  // Toggle dark mode & persistence
-  const darkToggle = document.getElementById('dark-toggle');
+  // 3. Wire up the dark-mode button
   if (darkToggle) {
     darkToggle.addEventListener('click', () => {
+      console.log('🌓 dark-mode button clicked');
       document.documentElement.classList.toggle('dark');
-      localStorage.theme = document.documentElement.classList.contains('dark')
-        ? 'dark'
-        : 'light';
+      console.log(
+        '  → root html has dark class? ',
+        document.documentElement.classList.contains('dark')
+      );
     });
-  }
-
-  // On load, apply saved theme
-  if (
-    localStorage.theme === 'dark' ||
-    (!('theme' in localStorage) &&
-      window.matchMedia('(prefers-color-scheme: dark)').matches)
-  ) {
-    document.documentElement.classList.add('dark');
   } else {
-    document.documentElement.classList.remove('dark');
+    console.error('❌ Missing dark-toggle button:', darkToggle);
   }
 });
