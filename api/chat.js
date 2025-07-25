@@ -9,10 +9,7 @@ export default async function handler(req) {
             );
         }
 
-        // --- CHANGE STARTS HERE ---
-        // For Node.js runtime, Vercel automatically parses JSON body into req.body
-        const message = req.body.message; // Directly access message from req.body
-        // --- CHANGE ENDS HERE ---
+        const message = req.body.message;
 
         if (!message) {
             throw new Error('No message provided in the request body.');
@@ -28,7 +25,10 @@ export default async function handler(req) {
                 body: JSON.stringify({
                     contents: [{ role: 'user', parts: [{ text: message }] }],
                     safetySettings: [
-                        { category: 'HARM_CATEGORY_DANGEROUS', threshold: 'BLOCK_NONE' }
+                        // --- CHANGE STARTS HERE ---
+                        // Corrected category name from 'HARM_CATEGORY_DANGEROUS' to 'DANGEROUS_CONTENT'
+                        { category: 'DANGEROUS_CONTENT', threshold: 'BLOCK_NONE' }
+                        // --- CHANGE ENDS HERE ---
                     ],
                     generationConfig: { temperature: 0.7 }
                 })
