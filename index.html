@@ -1,17 +1,19 @@
 <!DOCTYPE html>
 <html lang="en" class="scroll-smooth">
 <head>
-  <!-- 1) Tell Tailwind to use class-based dark mode -->
+  <!-- 1) Dark-mode must be configured before Tailwind’s script -->
   <script>
-    tailwind.config = { darkMode: 'class' };
+    tailwind.config = {
+      darkMode: 'class'
+    };
   </script>
 
-  <!-- 2) Load Tailwind *once*, *after* your config -->
+  <!-- 2) Now load Tailwind **once** -->
   <script src="https://cdn.tailwindcss.com"></script>
 
-  <!-- 3) All your meta/title tags come after -->
+  <!-- 3) Everything else (meta, title, other CSS) comes after -->
   <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>CATALYST+ by SOURAV</title>
 </head>
 <body class="bg-white text-slate-800 dark:bg-slate-900 dark:text-slate-200">
