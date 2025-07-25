@@ -46,19 +46,29 @@ document.addEventListener('DOMContentLoaded', () => {
     appendMessage('🤖 thinking...', false);
 
     try {
-      const res = await fetch('/api/chat', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({ message: text }),
-      });
-      const { reply } = await res.json();
-      // Remove the “thinking” message
-      chatWindow.lastChild.remove();
-      appendMessage(reply, false);
-    } catch (err) {
-      chatWindow.lastChild.remove();
-      appendMessage('⚠️ Error connecting to chatbot.', false);
-      console.error(err);
+    const res = await fetch('/api/chat', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ message: userText })
+    });
+
+    let payload;
+    try {
+      payload = await res.json();
+    } catch {
+      throw new Error('Server returned invalid JSON');
     }
+
+    if (!res.ok || payload.error) {
+      // Display server’s JSON error
+      throw new Error(payload.error || `HTTP ${res.status}`);
+    }
+
+    // Display the AI’s reply
+    addBotMessage(payload.reply);
+  } catch (err) {
+    // Show an error message bubble
+    addErrorMessage(`Error connecting to chatbot: ${err.message}`);
+  }
   });
 });

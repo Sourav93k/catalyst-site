@@ -55,33 +55,4 @@ export default async function handler(req) {
       { status: 500, headers: { 'Content-Type': 'application/json' } }
     );
   }
-}
-async function sendToChatbot(userText) {
-  addUserMessage(userText);
-
-  try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userText })
-    });
-
-    let payload;
-    try {
-      payload = await res.json();
-    } catch {
-      throw new Error('Server returned invalid JSON');
-    }
-
-    if (!res.ok || payload.error) {
-      // Display server’s JSON error
-      throw new Error(payload.error || `HTTP ${res.status}`);
-    }
-
-    // Display the AI’s reply
-    addBotMessage(payload.reply);
-  } catch (err) {
-    // Show an error message bubble
-    addErrorMessage(`Error connecting to chatbot: ${err.message}`);
-  }
-}
+} 
