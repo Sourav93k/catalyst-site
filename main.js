@@ -1,113 +1,114 @@
-// grab the container where all messages live
-const chatContainer = document.getElementById('chat');
-
-// 1) show a user bubble
-function addUserMessage(text) {
-  const msg = document.createElement('div');
-  msg.className = 'bubble user';
-  msg.textContent = text;
-  chatContainer.append(msg);
-  msg.scrollIntoView({ behavior: 'smooth' });
-}
-
-// 2) show a bot bubble
-function addBotMessage(text) {
-  const msg = document.createElement('div');
-  msg.className = 'bubble bot';
-  msg.textContent = text;
-  chatContainer.append(msg);
-  msg.scrollIntoView({ behavior: 'smooth' });
-}
-
-// 3) show an error bubble
-function addErrorMessage(text) {
-  const msg = document.createElement('div');
-  msg.className = 'bubble error';
-  msg.textContent = text;
-  chatContainer.append(msg);
-  msg.scrollIntoView({ behavior: 'smooth' });
-}
 document.addEventListener('DOMContentLoaded', () => {
-  // Dark-mode toggle
-  const darkToggle = document.getElementById('dark-toggle');
-  if (darkToggle) {
-    darkToggle.addEventListener('click', () => {
-      document.documentElement.classList.toggle('dark');
-      console.log(
-        '🌙 dark-mode toggled → html has .dark?',
-        document.documentElement.classList.contains('dark')
-      );
-    });
-  }
-
-  // Mobile-menu toggle (this was already working)
-  const menuBtn = document.getElementById('mobile-menu-btn');
-  const mobileMenu = document.getElementById('mobile-menu');
-  if (menuBtn && mobileMenu) {
-    menuBtn.addEventListener('click', () => {
-      mobileMenu.classList.toggle('hidden');
-    });
-  }
-});
-// AI Chatbot logic
-document.addEventListener('DOMContentLoaded', () => {
-  const chatWindow = document.getElementById('chat-window');
-  const chatForm   = document.getElementById('chat-form');
-  const chatInput  = document.getElementById('chat-input');
-
-  function appendMessage(text, fromUser = true) {
-    const msg = document.createElement('div');
-    msg.className = fromUser
-      ? 'self-end bg-indigo-100 text-right p-2 my-1 rounded-lg max-w-[80%]'
-      : 'self-start bg-slate-100 dark:bg-slate-800 p-2 my-1 rounded-lg max-w-[80%]';
-    msg.textContent = text;
-    chatWindow.appendChild(msg);
-    chatWindow.scrollTop = chatWindow.scrollHeight;
-  }
-
-  chatForm.addEventListener('submit', async (e) => {
-    e.preventDefault();
-    const text = chatInput.value.trim();
-    if (!text) return;
-    appendMessage(text, true);
-    chatInput.value = '';
-    // Show a “typing…” placeholder
-    appendMessage('🤖 thinking...', false);
-
-    try {
-    const res = await fetch('/api/chat', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ message: userText })
-    });
-
-    let payload;
-    try {
-      payload = await res.json();
-    } catch {
-      throw new Error('Server returned invalid JSON');
+    // --- Dark Mode Toggle ---
+    const darkToggle = document.getElementById('dark-toggle');
+    if (darkToggle) {
+        darkToggle.addEventListener('click', () => {
+            document.documentElement.classList.toggle('dark');
+            console.log(
+                '🌙 dark-mode toggled → html has .dark?',
+                document.documentElement.classList.contains('dark')
+            );
+        });
     }
 
-    if (!res.ok || payload.error) {
-      // Display server’s JSON error
-      throw new Error(payload.error || `HTTP ${res.status}`);
+    // --- Mobile Menu Toggle ---
+    const menuBtn = document.getElementById('mobile-menu-btn');
+    const mobileMenu = document.getElementById('mobile-menu');
+    if (menuBtn && mobileMenu) {
+        menuBtn.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
     }
 
-    // Display the AI’s reply
-    addBotMessage(payload.reply);
-  } catch (err) {
-    const chatContainer = document.getElementById('chat');
+    // --- AI Chatbot Logic ---
+    const chatDisplay = document.getElementById('chat-display'); // This is the div where messages appear
+    const chatInputForm = document.getElementById('chat-input-form'); // This is the form element
+    const userChatInput = document.getElementById('user-chat-input'); // This is the input field within the form
 
-  
-    // Show an error message bubble
-    addErrorMessage(`Error connecting to chatbot: ${err.message}`);
-  }
-  document.getElementById('chat-form').addEventListener('submit', e => {
-  e.preventDefault();
-  const text = e.target.userInput.value.trim();
-  if (!text) return;
-  sendToChatbot(text);
-  e.target.userInput.value = '';
-});
-  });
+    /**
+     * Appends a message bubble to the chat display.
+     * @param {string} text - The text content of the message.
+     * @param {boolean} [fromUser=true] - True if the message is from the user, false if from the bot.
+     * @param {boolean} [isError=false] - True if the message is an error message.
+     */
+    function appendMessage(text, fromUser = true, isError = false) {
+        const msg = document.createElement('div');
+        let classes = '';
+
+        if (isError) {
+            // Styling for error messages
+            classes = 'self-center bg-red-100 text-red-700 p-2 my-1 rounded-lg max-w-[90%] text-center shadow-md';
+        } else if (fromUser) {
+            // Styling for user messages
+            classes = 'self-end bg-amber-500 text-white p-2 my-1 rounded-lg max-w-[80%] shadow-md';
+        } else {
+            // Styling for bot messages
+            classes = 'self-start bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2 my-1 rounded-lg max-w-[80%] shadow-md';
+        }
+
+        // Add common flexbox classes for alignment
+        msg.className = classes + ' flex flex-col';
+        msg.textContent = text;
+        chatDisplay.appendChild(msg);
+
+        // Scroll to the bottom to show the latest message
+        chatDisplay.scrollTop = chatDisplay.scrollHeight;
+    }
+
+    // Event listener for the chatbot form submission
+    if (chatInputForm && userChatInput && chatDisplay) { // Ensure all elements exist before adding listener
+        chatInputForm.addEventListener('submit', async (e) => {
+            e.preventDefault(); // Prevent default form submission (page reload)
+
+            const userText = userChatInput.value.trim(); // Get user input and remove whitespace
+
+            if (!userText) return; // Do nothing if input is empty
+
+            appendMessage(userText, true); // Display user's message
+            userChatInput.value = ''; // Clear the input field
+
+            // Show a “typing…” placeholder while waiting for bot response
+            const thinkingMessage = '🤖 thinking...';
+            appendMessage(thinkingMessage, false);
+
+            try {
+                // Make the API call to your backend (chat.js)
+                const res = await fetch('/api/chat', { // Assuming your chat.js is exposed at /api/chat
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ message: userText }) // Send the user's message
+                });
+
+                // Remove the "thinking..." message
+                if (chatDisplay.lastChild && chatDisplay.lastChild.textContent === thinkingMessage) {
+                    chatDisplay.removeChild(chatDisplay.lastChild);
+                }
+
+                let payload;
+                try {
+                    payload = await res.json(); // Try to parse the response as JSON
+                } catch {
+                    throw new Error('Server returned invalid JSON. Check your backend API endpoint.');
+                }
+
+                // Check for HTTP errors or errors from your API response
+                if (!res.ok || payload.error) {
+                    throw new Error(payload.error || `Server error: HTTP ${res.status}`);
+                }
+
+                // Display the AI’s reply
+                appendMessage(payload.reply, false); // Display bot's message
+            } catch (err) {
+                // If an error occurs, remove thinking message and display error
+                if (chatDisplay.lastChild && chatDisplay.lastChild.textContent === thinkingMessage) {
+                    chatDisplay.removeChild(chatDisplay.lastChild);
+                }
+                appendMessage(`Error: ${err.message}`, false, true); // Display error message
+                console.error("Chatbot frontend fetch error:", err); // Log error for debugging
+            }
+        });
+    } else {
+        // This console.error will help you if elements are not found when the script runs
+        console.error("Chatbot elements not found. Please ensure your HTML IDs are correct: 'chat-display', 'chat-input-form', 'user-chat-input'");
+    }
 });
