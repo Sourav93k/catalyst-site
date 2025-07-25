@@ -11,9 +11,15 @@ document.addEventListener('DOMContentLoaded', () => {
   }
 
   if (darkToggle) {
-    darkToggle.addEventListener('click', () => {
-      console.log('🌓 clicked');
-      document.documentElement.classList.toggle('dark');
-    });
-  }
-});
+     darkToggle.addEventListener('click', () => {
+       console.log('🌓 dark-mode button clicked');
+       document.documentElement.classList.toggle('dark');
+       console.log(
+         '  → <html> has .dark now?',
+         document.documentElement.classList.contains('dark')
+       );
+     });
+   } else {
+     console.error('❌ dark-toggle (#dark-toggle) not found in DOM');
+   }
+ });  // end DOMContentLoaded
