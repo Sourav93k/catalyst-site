@@ -40,57 +40,57 @@ document.addEventListener('DOMContentLoaded', () => {
      * @param {boolean} [isError=false] - True if the message is an error message.
      */
     function appendMessage(text, fromUser = true, isError = false) {
+        console.log('appendMessage: Called with text:', text, 'fromUser:', fromUser, 'isError:', isError); // NEW LOG A
         const msg = document.createElement('div');
         let classes = '';
 
         if (isError) {
-            // Styling for error messages
             classes = 'self-center bg-red-100 text-red-700 p-2 my-1 rounded-lg max-w-[90%] text-center shadow-md';
         } else if (fromUser) {
-            // Styling for user messages
             classes = 'self-end bg-amber-500 text-white p-2 my-1 rounded-lg max-w-[80%] shadow-md';
         } else {
-            // Styling for bot messages
             classes = 'self-start bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2 my-1 rounded-lg max-w-[80%] shadow-md';
         }
 
-        // Add common flexbox classes for alignment
         msg.className = classes + ' flex flex-col';
         msg.textContent = text;
+        
+        console.log('appendMessage: Appending msg to chatDisplay. Current chatDisplay child count:', chatDisplay.children.length); // NEW LOG B
         chatDisplay.appendChild(msg);
-
-        // Scroll to the bottom to show the latest message
+        console.log('appendMessage: Msg appended. New chatDisplay child count:', chatDisplay.children.length); // NEW LOG C
+        
         chatDisplay.scrollTop = chatDisplay.scrollHeight;
+        console.log('appendMessage: Scrolled to bottom.'); // NEW LOG D
     }
 
     // Event listener for the chatbot form submission
-    if (chatInputForm && userChatInput && chatDisplay) { // Ensure all elements exist before adding listener
+    if (chatInputForm && userChatInput && chatDisplay) {
         console.log('main.js: Chatbot elements found. Attaching submit listener.'); // NEW LOG 6
         chatInputForm.addEventListener('submit', async (e) => {
             console.log('main.js: Chatbot form submitted!'); // NEW LOG 7
-            e.preventDefault(); // Prevent default form submission (page reload)
+            e.preventDefault();
 
-            const userText = userChatInput.value.trim(); // Get user input and remove whitespace
+            const userText = userChatInput.value.trim();
+            console.log('main.js: userText value after trim:', userText); // NEW LOG 9
 
             if (!userText) {
-                console.log('main.js: User input is empty.'); // NEW LOG 8
-                return; // Do nothing if input is empty
+                console.log('main.js: User input is empty. Returning.'); // NEW LOG 8 (Updated message)
+                return;
             }
 
-            // Display user's message
-            appendMessage(userText, true);
+            console.log('main.js: Calling appendMessage for user text.'); // NEW LOG 10
+            appendMessage(userText, true); // Display user's message
             userChatInput.value = ''; // Clear the input field
 
-            // Show a “thinking…” placeholder while waiting for bot response
+            console.log('main.js: Calling appendMessage for thinking message.'); // NEW LOG 11
             const thinkingMessage = '🤖 thinking...';
             appendMessage(thinkingMessage, false);
 
             try {
-                // Make the API call to your backend (chat.js)
-                const res = await fetch('https://catalyst-site.vercel.app/api/chat', { // Use your actual Vercel domain here!
+                const res = await fetch('https://catalyst-site.vercel.app/api/chat', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ message: userText }) // Send the user's message
+                    body: JSON.stringify({ message: userText })
                 });
 
                 // Remove the "thinking..." message
@@ -100,30 +100,26 @@ document.addEventListener('DOMContentLoaded', () => {
 
                 let payload;
                 try {
-                    payload = await res.json(); // Try to parse the response as JSON
+                    payload = await res.json();
                 } catch {
                     throw new Error('Server returned invalid JSON. Check your backend API endpoint.');
                 }
 
-                // Check for HTTP errors or errors from your API response
                 if (!res.ok || payload.error) {
                     throw new Error(payload.error || `Server error: HTTP ${res.status}`);
                 }
 
-                // Display the AI’s reply
                 appendMessage(payload.reply, false); // Display bot's message
 
             } catch (err) {
-                // If an error occurs, remove thinking message and display error
                 if (chatDisplay.lastChild && chatDisplay.lastChild.textContent === thinkingMessage) {
                     chatDisplay.removeChild(chatDisplay.lastChild);
                 }
-                appendMessage(`Error: ${err.message}`, false, true); // Display error message
-                console.error("Chatbot frontend fetch error:", err); // Log error for debugging
+                appendMessage(`Error: ${err.message}`, false, true);
+                console.error("Chatbot frontend fetch error:", err);
             }
         });
     } else {
-        // This console.error will help you if elements are not found when the script runs
-        console.error("Chatbot elements not found. Please ensure your HTML IDs are correct: 'chat-display', 'chat-input-form', 'user-chat-input'");
+        console.error("main.js: Chatbot elements not found. Please ensure your HTML IDs are correct: 'chat-display', 'chat-input-form', 'user-chat-input'");
     }
 });
