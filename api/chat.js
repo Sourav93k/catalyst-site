@@ -21,10 +21,11 @@ export default async function handler(req) {
         }
 
         console.log('Message extracted:', message.substring(0, Math.min(message.length, 50)) + '...'); // Log 5 (show first 50 chars)
-        console.log('Attempting to call Gemini API:', 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent'); // Log 6
+        // --- CRITICAL FIX HERE: Changed v1 to v1beta in the API endpoint URL ---
+        console.log('Attempting to call Gemini API:', 'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent'); // Log 6
 
         const geminiRes = await fetch(
-            'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent?key=' +
+            'https://generativelanguage.googleapis.com/v1beta/models/gemini-2.5-flash:generateContent?key=' + // <--- Changed v1 to v1beta
             process.env.GEMINI_KEY,
             {
                 method: 'POST',
