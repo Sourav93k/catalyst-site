@@ -1,4 +1,4 @@
-// REMOVE THIS LINE: export const runtime = 'edge';
+// REMOVE THIS LINE: export const runtime = 'edge'; // Ensure this line is commented out or deleted
 
 export default async function handler(req) {
     console.log('Function start: Received request.'); // Log 1
@@ -20,7 +20,7 @@ export default async function handler(req) {
             throw new Error('No message provided in the request body.');
         }
 
-        console.log('Message extracted:', message.substring(0, 50) + '...'); // Log 5 (show first 50 chars)
+        console.log('Message extracted:', message.substring(0, Math.min(message.length, 50)) + '...'); // Log 5 (show first 50 chars)
         console.log('Attempting to call Gemini API:', 'https://generativelanguage.googleapis.com/v1/models/gemini-2.5-flash:generateContent'); // Log 6
 
         const geminiRes = await fetch(
@@ -58,6 +58,7 @@ export default async function handler(req) {
             'Sorry, I could not generate a response.';
         
         console.log('Reply extracted. Function success.'); // Log 11
+        console.log('Preparing to return response to client.'); // Log 12
 
         return new Response(
             JSON.stringify({ reply }),
@@ -65,7 +66,7 @@ export default async function handler(req) {
         );
 
     } catch (err) {
-        console.error('API endpoint processing error in catch block:', err); // Log 12
+        console.error('API endpoint processing error in catch block:', err); // Log 13
         return new Response(
             JSON.stringify({ error: err.message || 'An unexpected error occurred.' }),
             { status: 500, headers: { 'Content-Type': 'application/json' } }
