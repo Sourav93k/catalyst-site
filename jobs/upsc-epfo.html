@@ -36,7 +36,7 @@
             <li><a href="/" class="hover:text-amber-500 transition-all duration-300">Home</a></li>
             <li><a href="/gov-jobs.html" class="hover:text-amber-500 transition-all duration-300">Gov Jobs</a></li>
             <li><a href="/gk.html" class="hover:text-amber-500 transition-all duration-300">Static GK</a></li>
-            <li><a href="#" class="hover:text-amber-500 transition-all duration-300">AI Chatbot</a></li>
+            <li><a href="#chatbot" class="hover:text-amber-500 transition-all duration-300">AI Chatbot</a></li>
         </ul>
         <a
             href="https://t.me/+P0aLY6AdFMxiOGZl"
@@ -55,8 +55,8 @@
                    absolute top-full left-0 w-full z-10 shadow-lg">
             <li><a href="/" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">Home</a></li>
             <li><a href="/gov-jobs.html" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">Gov Jobs</a></li>
-            <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">Static GK</a></li>
-            <li><a href="#" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">AI Chatbot</a></li>
+            <li><a href="/gk.html" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">Static GK</a></li>
+            <li><a href="#chatbot" class="block py-2 px-4 hover:bg-gray-100 dark:hover:bg-slate-700 rounded">AI Chatbot</a></li>
         </ul>
     </nav>
     <main class="container mx-auto px-4 py-12">
@@ -81,15 +81,15 @@
                     <tbody>
                         <tr>
                             <td>Application Start</td>
-                            <td>29/07/2025</td>
+                            <td>30/07/2025</td>
                         </tr>
                         <tr>
                             <td>Last Date to Apply Online</td>
-                            <td>18/08/2025</td>
+                            <td>20/08/2025</td>
                         </tr>
                         <tr>
                             <td>Last Date to Pay Application Fees</td>
-                            <td>18/08/2025</td>
+                            <td>20/08/2025</td>
                         </tr>
                         <tr>
                             <td>Admit Card Release</td>
@@ -130,7 +130,7 @@
             </section>
 
             <section>
-                <h2>Age Limit & Eligibility (as of 18/08/2025)</h2>
+                <h2>Age Limit & Eligibility (as of 20/08/2025)</h2>
                 <ul>
                     <li>**Age Limit:** Minimum 18 years, Maximum 30 years. Age relaxation applicable as per Government rules for reserved categories.</li>
                     <li>**Educational Qualification:** Bachelor's Degree in any discipline from a recognized University.</li>
@@ -211,13 +211,13 @@
                 <p class="text-lg text-slate-700 dark:text-slate-300 mb-4">
                     Applications will be invited online through the UPSC official website. Ensure all details are accurate and submit well before the deadline.
                 </p>
-                <a href="https://upsconline.nic.in/"
+                <a href="https://upsconline.nic.in/ora/oraauth/candidate_login.php"
                    target="_blank" rel="noopener noreferrer"
                    class="bg-amber-600 text-white px-8 py-4 rounded-full font-bold text-xl shadow-lg hover:bg-amber-700 transition duration-300 ease-in-out">
-                    Apply Online Here (UPSC)
+                    Apply Online Here (UPSC ORA)
                 </a>
                 <p class="text-sm text-slate-500 dark:text-slate-400 mt-4">
-                    
+                    (Link is to UPSC's main site; specific application link for this notification may differ upon release.)
                 </p>
             </section>
 
@@ -234,9 +234,10 @@
                 <h4 class="font-semibold mb-2">Quick Links</h4>
                 <ul class="space-y-1">
                     <li><a href="/" class="hover:text-amber-500 transition-all duration-300">Home</a></li>
+                    <li><a href="#about" class="hover:text-amber-500 transition-all duration-300">About Me</a></li>
                     <li><a href="/gov-jobs.html" class="hover:text-amber-500 transition-all duration-300">Gov Jobs</a></li>
-                    <li><a href="#" class="hover:text-amber-500 transition-all duration-300">Static GK</a></li>
-                    <li><a href="#" class="hover:text-amber-500 transition-all duration-300">AI Chatbot</a></li>
+                    <li><a href="/gk.html" class="hover:text-amber-500 transition-all duration-300">Static GK</a></li>
+                    <li><a href="#chatbot" class="hover:text-amber-500 transition-all duration-300">AI Chatbot</a></li>
                 </ul>
             </div>
             <div>
@@ -274,7 +275,7 @@
             const menuBtn = document.getElementById('mobile-menu-btn');
             const mobileMenu = document.getElementById('mobile-menu');
             if (menuBtn && mobileMenu) {
-                menuBtn.addEventListener('click', () => {
+                mobileMenu.addEventListener('click', () => {
                     mobileMenu.classList.toggle('hidden');
                 });
             }
