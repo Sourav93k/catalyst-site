@@ -100,13 +100,13 @@ document.addEventListener('DOMContentLoaded', () => {
 
         if (isError) {
             // Styling for error messages
-            classes = 'self-center bg-red-100 text-red-700 p-2 my-1 rounded-lg max-w-[90%] text-center shadow-md';
+            classes = 'self-center bg-red-100 text-red-700 p-3 my-1 rounded-xl max-w-[90%] text-center shadow-md'; // Increased padding, more rounded
         } else if (fromUser) {
-            // Refined User Message Bubble (Amber, rounded, subtle shadow)
-            classes = 'self-end bg-amber-500 text-white p-2 my-1 rounded-lg shadow-md max-w-[80%]';
+            // Refined User Message Bubble: Full rounding on most sides, less on top-right for 'tail' effect
+            classes = 'self-end bg-amber-500 text-white p-3 my-1 rounded-xl rounded-tr-sm shadow-md max-w-[80%]'; // Increased padding, more rounded, subtle tail
         } else {
-            // Refined Bot Message Bubble (Softer background, rounded, subtle shadow)
-            classes = 'self-start bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-2 my-1 rounded-lg shadow-md max-w-[80%]';
+            // Refined Bot Message Bubble: Softer background, rounded, subtle shadow, less on top-left for 'tail' effect
+            classes = 'self-start bg-slate-200 dark:bg-slate-700 dark:text-slate-200 p-3 my-1 rounded-xl rounded-tl-sm shadow-md max-w-[80%]'; // Increased padding, more rounded, subtle tail
         }
 
         // Add common flexbox classes for alignment
